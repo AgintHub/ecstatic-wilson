@@ -1,29 +1,30 @@
 dag_type: plain_text
-description: Fetch stock data from the NYSE and NASDAQ using APIs, web scraping, and
-  data storage.
-name: fetch_stock_data_workflow
+description: Fetch stock data from NYSE, NASDAQ, and Toronto Stock Exchange
+name: fetch_stock_data_workflow_with_toronto_stock_exchange
 nodes:
   authorize_api_access:
     agent: false
-    description: Fetch API keys for authorized access to NYSE and NASDAQ data.
+    description: Fetch API keys for authorized access to NYSE, NASDAQ, and Toronto
+      Stock Exchange data
     name: authorize_api_access
     nodes_depended_on:
     - resolve_api_endpoints
     nodes_dependent_on: []
-    prompt: Fetch API keys for accessing NYSE and NASDAQ ticker data. Provide key
-      formats and usage guidelines.
+    prompt: Fetch API keys for accessing NYSE, NASDAQ, and Toronto Stock Exchange
+      ticker data. Provide key formats and usage guidelines.
   configure_web_scraper:
     agent: false
-    description: Set up a web scraper to fetch ticker metadata.
+    description: Set up a web scraper to fetch ticker metadata
     name: configure_web_scraper
     nodes_depended_on:
     - gather_ticker_symbols
     nodes_dependent_on: []
-    prompt: Configure a web scraper to access NYSE and NASDAQ ticker metadata. Identify
-      required headers, query parameters, and user agent headers.
+    prompt: Configure a web scraper to access NYSE, NASDAQ, and Toronto Stock Exchange
+      ticker metadata. Identify required headers, query parameters, and user agent
+      headers.
   fetch_stock_data_nasdaq:
     agent: false
-    description: Use APIs to fetch NASDAQ stock data.
+    description: Use APIs to fetch NASDAQ stock data
     name: fetch_stock_data_nasdaq
     nodes_depended_on:
     - authorize_api_access
@@ -32,16 +33,25 @@ nodes:
       list of symbols. Store data in a database for later use.
   fetch_stock_data_nyse:
     agent: false
-    description: Use APIs to fetch NYSE stock data.
+    description: Use APIs to fetch NYSE stock data
     name: fetch_stock_data_nyse
     nodes_depended_on:
     - authorize_api_access
     nodes_dependent_on: []
     prompt: Use the authorized API keys to fetch NYSE stock data for the compiled
       list of symbols. Store data in a database for later use.
+  fetch_stock_data_toronto:
+    agent: false
+    description: Use APIs to fetch Toronto Stock Exchange stock data
+    name: fetch_stock_data_toronto
+    nodes_depended_on:
+    - authorize_api_access
+    nodes_dependent_on: []
+    prompt: Use the authorized API keys to fetch Toronto Stock Exchange stock data
+      for the compiled list of symbols. Store data in a database for later use.
   fetch_ticker_metadata:
     agent: false
-    description: Use the web scraper to fetch ticker metadata.
+    description: Use the web scraper to fetch ticker metadata
     name: fetch_ticker_metadata
     nodes_depended_on:
     - configure_web_scraper
@@ -50,15 +60,16 @@ nodes:
       symbols. Store metadata in a database for later use.
   gather_ticker_symbols:
     agent: false
-    description: Compile a list of all NYSE and NASDAQ ticker symbols.
+    description: Compile a list of all NYSE, NASDAQ, and Toronto Stock Exchange ticker
+      symbols
     name: gather_ticker_symbols
     nodes_depended_on: []
     nodes_dependent_on: []
-    prompt: Create a list of all NYSE and NASDAQ ticker symbols. Format symbols to
-      match API requirements.
+    prompt: Create a list of all NYSE, NASDAQ, and Toronto Stock Exchange ticker symbols.
+      Format symbols to match API requirements.
   generate_data_quality_report:
     agent: false
-    description: Report data quality issues and suggest improvements.
+    description: Report data quality issues and suggest improvements
     name: generate_data_quality_report
     nodes_depended_on:
     - store_fetch_result
@@ -67,19 +78,22 @@ nodes:
       Provide a report on data inconsistencies and missing information.
   resolve_api_endpoints:
     agent: false
-    description: Identify API endpoints for NYSE and NASDAQ ticker data.
+    description: Identify API endpoints for NYSE, NASDAQ, and Toronto Stock Exchange
+      ticker data
     name: resolve_api_endpoints
     nodes_depended_on: []
     nodes_dependent_on: []
-    prompt: List API endpoints for fetching NYSE and NASDAQ ticker data. Provide URLs
-      and description of required parameters.
+    prompt: List API endpoints for fetching NYSE, NASDAQ, and Toronto Stock Exchange
+      ticker data. Provide URLs and description of required parameters.
   store_fetch_result:
     agent: false
-    description: Store the combined NYSE and NASDAQ stock data in a database.
+    description: Store the combined NYSE, NASDAQ, and Toronto Stock Exchange stock
+      data in a database
     name: store_fetch_result
     nodes_depended_on:
     - fetch_stock_data_nyse
     - fetch_stock_data_nasdaq
+    - fetch_stock_data_toronto
     nodes_dependent_on: []
-    prompt: Store the combined NYSE and NASDAQ stock data in a database for later
-      analysis. Ensure data integrity and concurrency control.
+    prompt: Store the combined NYSE, NASDAQ, and Toronto Stock Exchange stock data
+      in a database for later analysis. Ensure data integrity and concurrency control.
